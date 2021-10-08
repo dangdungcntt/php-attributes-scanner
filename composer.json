@@ -1,60 +1,43 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "nddcoder/php-attributes-scanner",
+    "description": "Scan directory and get Class with Attributes info",
     "keywords": [
-        ":vendor_name",
-        "laravel",
-        ":package_slug"
+        "nddcoder",
+        "php-attributes-scanner"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/dangdungcntt/php-attributes-scanner",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Dung Nguyen Dang",
+            "email": "dangdungcntt@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.0",
-        "spatie/laravel-package-tools": "^1.4.3",
-        "illuminate/contracts": "^8.37"
+        "symfony/finder": "^5.3",
+        "symfony/var-dumper": "^5.3"
     },
     "require-dev": {
-        "nunomaduro/collision": "^5.3",
-        "orchestra/testbench": "^6.15",
-        "pestphp/pest": "^1.18",
-        "pestphp/pest-plugin-laravel": "^1.1",
-        "spatie/laravel-ray": "^1.23",
-        "vimeo/psalm": "^4.8"
+        "pestphp/pest": "^1.18"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Nddcoder\\PhpAttributesScanner\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Nddcoder\\PhpAttributesScanner\\Tests\\": "tests"
         }
     },
     "scripts": {
         "test": "./vendor/bin/pest --no-coverage",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test-coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage --min=90"
     },
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
-            ],
-            "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\SkeletonFacade"
-            }
-        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
