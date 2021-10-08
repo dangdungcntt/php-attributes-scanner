@@ -34,7 +34,7 @@ class ScanResult
      */
     public function findByName(string $className): array
     {
-        return array_filter($this->data, fn(ClassInfo $classInfo) => $classInfo->getName() == $className);
+        return array_filter($this->data, fn (ClassInfo $classInfo) => $classInfo->getName() == $className);
     }
 
     /**

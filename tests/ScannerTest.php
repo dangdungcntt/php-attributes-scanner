@@ -17,7 +17,8 @@ it('can scan and return result', function () {
     expect($result->all())
         ->toHaveCount(2)
 
-        ->each(fn($item) => $item
+        ->each(
+            fn ($item) => $item
             ->toBeInstanceOf(\Nddcoder\PhpAttributesScanner\Model\ClassInfo::class)
             ->getName()->toBeString()
             ->getAttributes()->toBeArray()
@@ -30,7 +31,8 @@ it('can scan and return result', function () {
 
     expect($result->all()[0]->getMethods())
         ->toHaveCount(2)
-        ->each(fn($item) => $item
+        ->each(
+            fn ($item) => $item
             ->toBeInstanceOf(\Nddcoder\PhpAttributesScanner\Model\MethodInfo::class)
             ->getName()->toBeString()
             ->getAttributes()->toBeArray()
@@ -42,7 +44,8 @@ it('can scan and return result', function () {
 
     expect($result->all()[1]->getProperties())
         ->toHaveCount(1)
-        ->each(fn($item) => $item
+        ->each(
+            fn ($item) => $item
             ->toBeInstanceOf(\Nddcoder\PhpAttributesScanner\Model\PropertyInfo::class)
             ->getName()->toEqual('postService')
             ->getAttributes()->toBeArray()
@@ -52,7 +55,8 @@ it('can scan and return result', function () {
 });
 
 it('init attribute', function () {
-    $directory = __DIR__.'/TestClasses/Controllers';;
+    $directory = __DIR__.'/TestClasses/Controllers';
+    ;
     $namespace = 'Nddcoder\PhpAttributesScanner\Tests\TestClasses\Controllers';
 
     $result = Scanner::in($directory, $namespace)->scan();

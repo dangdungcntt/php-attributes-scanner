@@ -49,15 +49,17 @@ class Scanner
 
     protected function scanFile(SplFileInfo $file): ?ClassInfo
     {
-        $class     = $this->namespace.'\\'.trim(Str::replaceFirst($this->directory, '', $file->getRealPath()),
-                DIRECTORY_SEPARATOR);
+        $class = $this->namespace.'\\'.trim(
+            Str::replaceFirst($this->directory, '', $file->getRealPath()),
+            DIRECTORY_SEPARATOR
+        );
         $className = str_replace(
             DIRECTORY_SEPARATOR,
             '\\',
             ucfirst(Str::replaceLast('.php', '', $class))
         );
 
-        if (!class_exists($className)) {
+        if (! class_exists($className)) {
             return null;
         }
 
@@ -67,7 +69,7 @@ class Scanner
             name: $reflectionClass->getName(),
             attributes: $this->initAttributes($reflectionClass->getAttributes()),
             methods: array_map(
-                fn(\ReflectionMethod $reflectionMethod) => new MethodInfo(
+                fn (\ReflectionMethod $reflectionMethod) => new MethodInfo(
                     name: $reflectionMethod->getName(),
                     attributes: $this->initAttributes($reflectionMethod->getAttributes()),
                     reflection: $reflectionMethod
@@ -75,7 +77,7 @@ class Scanner
                 $reflectionClass->getMethods()
             ),
             properties: array_map(
-                fn(\ReflectionProperty $reflectionProperty) => new PropertyInfo(
+                fn (\ReflectionProperty $reflectionProperty) => new PropertyInfo(
                     name: $reflectionProperty->getName(),
                     attributes: $this->initAttributes($reflectionProperty->getAttributes()),
                     reflection: $reflectionProperty,
@@ -89,7 +91,7 @@ class Scanner
     protected function initAttributes(array $reflectionAttributes): array
     {
         return array_map(
-            fn(\ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(),
+            fn (\ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(),
             $reflectionAttributes
         );
     }
