@@ -2,13 +2,13 @@
 
 namespace Nddcoder\PhpAttributesScanner\Model;
 
-class MethodInfo
+class ParameterInfo
 {
     public function __construct(
         protected string $name,
         protected array $attributes,
-        protected ?array $parameters,
-        protected \ReflectionMethod $reflection
+        protected ?\ReflectionType $type,
+        protected \ReflectionParameter $reflection,
     ) {
     }
 
@@ -22,18 +22,15 @@ class MethodInfo
         return $this->attributes;
     }
 
-    /**
-     * @return \Nddcoder\PhpAttributesScanner\Model\ParameterInfo[]|null
-     */
-    public function getParameters(): ?array
+    public function getType(): ?\ReflectionType
     {
-        return $this->parameters;
+        return $this->type;
     }
 
     /**
-     * @return \ReflectionMethod
+     * @return \ReflectionParameter
      */
-    public function getReflection(): \ReflectionMethod
+    public function getReflection(): \ReflectionParameter
     {
         return $this->reflection;
     }

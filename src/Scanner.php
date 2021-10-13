@@ -4,6 +4,7 @@ namespace Nddcoder\PhpAttributesScanner;
 
 use Nddcoder\PhpAttributesScanner\Model\ClassInfo;
 use Nddcoder\PhpAttributesScanner\Model\MethodInfo;
+use Nddcoder\PhpAttributesScanner\Model\ParameterInfo;
 use Nddcoder\PhpAttributesScanner\Model\PropertyInfo;
 use Nddcoder\PhpAttributesScanner\Support\Str;
 use ReflectionClass;
@@ -49,35 +50,55 @@ class Scanner
 
     protected function scanFile(SplFileInfo $file): ?ClassInfo
     {
-        $class = $this->namespace.'\\'.trim(
-            Str::replaceFirst($this->directory, '', $file->getRealPath()),
-            DIRECTORY_SEPARATOR
-        );
+        $class     = $this->namespace.'\\'.trim(
+                Str::replaceFirst($this->directory, '', $file->getRealPath()),
+                DIRECTORY_SEPARATOR
+            );
         $className = str_replace(
             DIRECTORY_SEPARATOR,
             '\\',
             ucfirst(Str::replaceLast('.php', '', $class))
         );
 
-        if (! class_exists($className)) {
+        if (!class_exists($className)) {
             return null;
         }
 
         $reflectionClass = new ReflectionClass($className);
 
+        $constructorReflection = $reflectionClass->getConstructor();
+
         return new ClassInfo(
             name: $reflectionClass->getName(),
             attributes: $this->initAttributes($reflectionClass->getAttributes()),
-            methods: array_map(
-                fn (\ReflectionMethod $reflectionMethod) => new MethodInfo(
-                    name: $reflectionMethod->getName(),
-                    attributes: $this->initAttributes($reflectionMethod->getAttributes()),
-                    reflection: $reflectionMethod
-                ),
-                $reflectionClass->getMethods()
+            constructor: $constructorReflection ? new MethodInfo(
+                name: $constructorReflection->getName(),
+                attributes: $this->initAttributes($constructorReflection->getAttributes()),
+                parameters: array_map(fn(
+                    \ReflectionParameter $reflectionParameter
+                ) => new ParameterInfo(
+                    name: $reflectionParameter->getName(),
+                    attributes: $this->initAttributes($reflectionParameter->getAttributes()),
+                    type: $reflectionParameter->getType(),
+                    reflection: $reflectionParameter,
+                ), $constructorReflection->getParameters()),
+                reflection: $constructorReflection
+            ) : null,
+            methods: array_values(
+                array_filter(
+                    array_map(
+                        fn(\ReflectionMethod $reflectionMethod) => new MethodInfo(
+                            name: $reflectionMethod->getName(),
+                            attributes: $this->initAttributes($reflectionMethod->getAttributes()),
+                            parameters: null,
+                            reflection: $reflectionMethod
+                        ),
+                        $reflectionClass->getMethods()
+                    )
+                    , fn(MethodInfo $m) => $m->getName() != '__construct')
             ),
             properties: array_map(
-                fn (\ReflectionProperty $reflectionProperty) => new PropertyInfo(
+                fn(\ReflectionProperty $reflectionProperty) => new PropertyInfo(
                     name: $reflectionProperty->getName(),
                     attributes: $this->initAttributes($reflectionProperty->getAttributes()),
                     reflection: $reflectionProperty,
@@ -91,7 +112,7 @@ class Scanner
     protected function initAttributes(array $reflectionAttributes): array
     {
         return array_map(
-            fn (\ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(),
+            fn(\ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(),
             $reflectionAttributes
         );
     }

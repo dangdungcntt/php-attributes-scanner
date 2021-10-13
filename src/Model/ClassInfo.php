@@ -7,6 +7,7 @@ class ClassInfo
     public function __construct(
         protected string $name,
         protected array $attributes,
+        protected ?MethodInfo $constructor,
         protected array $methods,
         protected array $properties,
         protected \ReflectionClass $reflection
@@ -21,6 +22,11 @@ class ClassInfo
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    public function getConstructor(): ?MethodInfo
+    {
+        return $this->constructor;
     }
 
     /**

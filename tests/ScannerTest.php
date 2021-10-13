@@ -42,6 +42,19 @@ it('can scan and return result', function () {
     expect($result->all()[1])
         ->getAttributes()->toHaveCount(2);
 
+    expect($result->all()[1])
+        ->getConstructor()->toBeInstanceOf(\Nddcoder\PhpAttributesScanner\Model\MethodInfo::class);
+
+    expect($result->all()[1]->getConstructor())
+        ->getParameters()->toHaveCount(1);
+
+    expect($result->all()[1]->getConstructor()->getParameters()[0])
+        ->toBeInstanceOf(\Nddcoder\PhpAttributesScanner\Model\ParameterInfo::class)
+        ->getName()->toEqual('postService')
+        ->getType()->toBeInstanceOf(ReflectionNamedType::class)
+        ->getReflection()->toBeInstanceOf(ReflectionParameter::class)
+        ->getAttributes()->toHaveCount(1);
+
     expect($result->all()[1]->getProperties())
         ->toHaveCount(1)
         ->each(
