@@ -1,8 +1,7 @@
 # This is my package php-attributes-scanner
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/nddcoder/php-attributes-scanner.svg?style=flat-square)](https://packagist.org/packages/nddcoder/php-attributes-scanner)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/dangdungcntt/php-attributes-scanner/run-tests?label=tests)](https://github.com/dangdungcntt/php-attributes-scanner/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/dangdungcntt/php-attributes-scanner/Check%20&%20fix%20styling?label=code%20style)](https://github.com/dangdungcntt/php-attributes-scanner/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://github.com/dangdungcntt/php-attributes-scanner/workflows/Tests/badge.svg?branch=main)](https://github.com/dangdungcntt/php-attributes-scanner/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/nddcoder/php-attributes-scanner.svg?style=flat-square)](https://packagist.org/packages/nddcoder/php-attributes-scanner)
 
 ## Installation
