@@ -66,14 +66,14 @@ class Scanner
 
         $reflectionClass = new ReflectionClass($className);
 
-        $constructorReflection = $reflectionClass->getConstructor();
+        $reflectionConstructor = $reflectionClass->getConstructor();
 
         return new ClassInfo(
             name: $reflectionClass->getName(),
             attributes: $this->initAttributes($reflectionClass->getAttributes()),
-            constructor: $constructorReflection ? new MethodInfo(
-                name: $constructorReflection->getName(),
-                attributes: $this->initAttributes($constructorReflection->getAttributes()),
+            constructor: $reflectionConstructor ? new MethodInfo(
+                name: $reflectionConstructor->getName(),
+                attributes: $this->initAttributes($reflectionConstructor->getAttributes()),
                 parameters: array_map(fn(
                     \ReflectionParameter $reflectionParameter
                 ) => new ParameterInfo(
@@ -81,8 +81,8 @@ class Scanner
                     attributes: $this->initAttributes($reflectionParameter->getAttributes()),
                     type: $reflectionParameter->getType(),
                     reflection: $reflectionParameter,
-                ), $constructorReflection->getParameters()),
-                reflection: $constructorReflection
+                ), $reflectionConstructor->getParameters()),
+                reflection: $reflectionConstructor
             ) : null,
             methods: array_values(
                 array_filter(
@@ -90,7 +90,14 @@ class Scanner
                         fn(\ReflectionMethod $reflectionMethod) => new MethodInfo(
                             name: $reflectionMethod->getName(),
                             attributes: $this->initAttributes($reflectionMethod->getAttributes()),
-                            parameters: null,
+                            parameters: array_map(fn(
+                                \ReflectionParameter $reflectionParameter
+                            ) => new ParameterInfo(
+                                name: $reflectionParameter->getName(),
+                                attributes: $this->initAttributes($reflectionParameter->getAttributes()),
+                                type: $reflectionParameter->getType(),
+                                reflection: $reflectionParameter,
+                            ), $reflectionMethod->getParameters()),
                             reflection: $reflectionMethod
                         ),
                         $reflectionClass->getMethods()
