@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": "^8.0",
-        "symfony/finder": "^5.3"},
+        "symfony/finder": "^6.0"
+    },
     "require-dev": {
         "pestphp/pest": "^1.18",
         "symfony/var-dumper": "^5.3"
@@ -36,7 +37,10 @@
         "test-coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage --min=90"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
