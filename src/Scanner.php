@@ -33,7 +33,8 @@ class Scanner
         $files = (new Finder())
             ->files()
             ->name('*.php')
-            ->in($this->directory);
+            ->in($this->directory)
+            ->sortByName();
 
         $results = [];
 
@@ -74,7 +75,7 @@ class Scanner
             constructor: $reflectionConstructor ? new MethodInfo(
                 name: $reflectionConstructor->getName(),
                 attributes: $this->initAttributes($reflectionConstructor->getAttributes()),
-                parameters: array_map(fn(
+                parameters: array_map(fn (
                     \ReflectionParameter $reflectionParameter
                 ) => new ParameterInfo(
                     name: $reflectionParameter->getName(),
@@ -87,10 +88,10 @@ class Scanner
             methods: array_values(
                 array_filter(
                     array_map(
-                        fn(\ReflectionMethod $reflectionMethod) => new MethodInfo(
+                        fn (\ReflectionMethod $reflectionMethod) => new MethodInfo(
                             name: $reflectionMethod->getName(),
                             attributes: $this->initAttributes($reflectionMethod->getAttributes()),
-                            parameters: array_map(fn(
+                            parameters: array_map(fn (
                                 \ReflectionParameter $reflectionParameter
                             ) => new ParameterInfo(
                                 name: $reflectionParameter->getName(),
@@ -102,10 +103,12 @@ class Scanner
                         ),
                         $reflectionClass->getMethods()
                     )
-                    , fn(MethodInfo $m) => $m->getName() != '__construct')
+                    ,
+                    fn (MethodInfo $m) => $m->getName() != '__construct'
+                )
             ),
             properties: array_map(
-                fn(\ReflectionProperty $reflectionProperty) => new PropertyInfo(
+                fn (\ReflectionProperty $reflectionProperty) => new PropertyInfo(
                     name: $reflectionProperty->getName(),
                     attributes: $this->initAttributes($reflectionProperty->getAttributes()),
                     reflection: $reflectionProperty,
@@ -119,7 +122,7 @@ class Scanner
     protected function initAttributes(array $reflectionAttributes): array
     {
         return array_map(
-            fn(\ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(),
+            fn (\ReflectionAttribute $reflectionAttribute) => $reflectionAttribute->newInstance(),
             $reflectionAttributes
         );
     }
